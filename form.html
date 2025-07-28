@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OCR Image Reader</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>📄 OCR Image Text Extractor</h1>
+    <form id="ocrForm" enctype="multipart/form-data">
+      <input type="file" name="image" required />
+      <button type="submit">Upload & Read Text</button>
+    </form>
+    <h3>📝 Extracted Text:</h3>
+    <pre id="result">Waiting for input...</pre>
+  </div>
+
+  <script>
+    document.getElementById("ocrForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const response = await fetch("/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+      document.getElementById("result").textContent = result.text || "No text found.";
+    });
+  </script>
+</body>
+</html>
+
